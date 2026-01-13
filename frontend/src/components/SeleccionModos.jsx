@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 
-function SeleccionModos({ alSeleccionarAnagrama, alClickCasa, alClickRegresar }) {
+function SeleccionModos({ alSeleccionarAnagrama, alSeleccionarSilabas, alClickCasa, alClickRegresar }) {
 
     // Función para manejar la tecla Enter o Espacio
     const manejarTeclado = (e, accion) => {
@@ -38,8 +38,8 @@ function SeleccionModos({ alSeleccionarAnagrama, alClickCasa, alClickRegresar })
                         className="game-card"
                         onClick={alSeleccionarAnagrama}
                         onKeyDown={(e) => manejarTeclado(e, alSeleccionarAnagrama)}
-                        tabIndex="0"           // Hace que el div sea enfocable con TAB
-                        role="button"          // Indica a lectores de pantalla que actúa como botón
+                        tabIndex="0"
+                        role="button"
                         aria-label="Jugar Anagrama"
                     >
                         <div className="game-icon">🔤</div>
@@ -50,7 +50,8 @@ function SeleccionModos({ alSeleccionarAnagrama, alClickCasa, alClickRegresar })
                     {/* Tarjeta Sílabas */}
                     <div
                         className="game-card"
-                        onKeyDown={(e) => manejarTeclado(e, () => alert("Próximamente"))}
+                        onClick={alSeleccionarSilabas}
+                        onKeyDown={(e) => manejarTeclado(e, alSeleccionarSilabas)}
                         tabIndex="0"
                         role="button"
                         aria-label="Jugar Sílabas correctas"

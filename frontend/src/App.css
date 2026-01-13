@@ -604,6 +604,12 @@ body {
     box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
 }
 
+.syllable-option.selected {
+    background: linear-gradient(to bottom right, #3b82f6, #06b6d4);
+    transform: scale(1.08);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
 /* Pantalla de error */
 .error-icon {
     font-size: 5rem;
@@ -629,6 +635,69 @@ body {
 .correct-answer {
     font-size: 3rem;
     color: #1e293b;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Pantalla de éxito */
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(16, 185, 129, 0.95);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.success-icon {
+    font-size: 6rem;
+    animation: bounceIn 0.5s ease;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.success-title {
+    color: white;
+    font-size: 3.5rem;
+    margin: 1rem 0;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.success-card {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.success-text {
+    font-size: 1.875rem;
+    color: white;
     text-align: center;
     font-weight: 600;
 }

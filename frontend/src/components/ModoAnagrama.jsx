@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import '../App.css';
+import PantallaCorrecta from './PantallaCorrecta';
+import PantallaError from './PantallaError';
 
 function ModoAnagrama({palabras, indice, alClickCasa, alClickOracion}) {
     const [letrasDisponibles, setLetrasDisponibles] = useState([]);
     const [letrasSeleccionadas, setLetrasSeleccionadas] = useState([]);
+    const [mostrarExito, setMostrarExito] = useState(false);
+    const [mostrarError, setMostrarError] = useState(false);
 
     useEffect(() => {
         if (palabras && palabras[indice]) {
@@ -14,6 +18,8 @@ function ModoAnagrama({palabras, indice, alClickCasa, alClickOracion}) {
     const prepararRonda = (palabraData) => {
         if (!palabraData) return;
         setLetrasSeleccionadas([]);
+        setMostrarExito(false);
+        setMostrarError(false);
         let letras = palabraData.palabra_dividida_letras
             .split('-')
             .sort(() => Math.random() - 0.5);
@@ -35,10 +41,20 @@ function ModoAnagrama({palabras, indice, alClickCasa, alClickOracion}) {
         const respuestaJugador = letrasSeleccionadas.join('');
 
         if (respuestaJugador === preguntaActual.nombre) {
-            alClickOracion();
+            setMostrarExito(true);
         } else {
-            alert("Inténtalo de nuevo, ¡tú puedes!");
+            setMostrarError(true);
         }
+    };
+
+    const continuarDespuesDeExito = () => {
+        setMostrarExito(false);
+        alClickOracion();
+    };
+
+    const continuarDespuesDeError = () => {
+        setMostrarError(false);
+        alClickOracion();
     };
 
     // Función auxiliar para activar letras con Enter o Espacio
@@ -72,6 +88,23 @@ function ModoAnagrama({palabras, indice, alClickCasa, alClickOracion}) {
 
     const palabraActual = palabras[indice];
     if (!palabraActual) return <div className="screen">Cargando juego...</div>;
+
+    // Mostrar pantalla de éxito
+    if (mostrarExito) {
+        return <PantallaCorrecta alContinuar={continuarDespuesDeExito} />;
+    }
+
+    // Mostrar pantalla de error
+    if (mostrarError) {
+        return (
+            <PantallaError
+                alClickCasa={alClickCasa}
+                alContinuar={continuarDespuesDeError}
+                respuestaCorrecta={palabraActual.nombre}
+                tipoJuego="anagrama"
+            />
+        );
+    }
 
     return (
         <div id="anagram-game-screen" className="screen">
