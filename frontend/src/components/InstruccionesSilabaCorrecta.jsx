@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import '../App.css';
 import axios from "axios";
+import { API_ENDPOINTS } from '../config/api';
 
-function InstruccionesSilabas({ alClickCasa, alClickRegresar, alClickJugarSilabas }) {
+function InstruccionesSilabas({ alClickCasa, alClickRegresar, alClickJugarSilabas, numImagenes = 3 }) {
     const [cargando, setCargando] = useState(false);
 
     const iniciarJuegoSilabas = async () => {
         setCargando(true);
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/juego2/');
+            const res = await axios.get(`${API_ENDPOINTS.SILABAS}?cantidad=${numImagenes}`);
             alClickJugarSilabas(res.data);
         } catch (err) {
             console.error("Error al obtener datos:", err);
@@ -39,7 +40,9 @@ function InstruccionesSilabas({ alClickCasa, alClickRegresar, alClickJugarSilaba
                 <div className="instruction-card">
                     <p className="instruction-text">1. Se te mostrara una imagen y una palabra incompleta.</p>
                     <p className="instruction-text">2. Tu tarea es elegir la silaba correcta que falta para completar la palabra.</p>
-                    <p className="instruction-text">3. Responderas 5 palabras en total.</p>
+                    <p className="instruction-text">
+                        3. Responderás {numImagenes} {numImagenes === 1 ? 'palabra' : 'palabras'} en total.
+                    </p>
                 </div>
                 <button
                     className="btn-primary"

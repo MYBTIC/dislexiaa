@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import '../App.css';
 import axios from "axios";
+import { API_ENDPOINTS } from '../config/api';
 
-function InstruccionesAnagrama({ alClickJugarAnagrama, alClickCasa, alClickRegresar }) {
+function InstruccionesAnagrama({ alClickJugarAnagrama, alClickCasa, alClickRegresar, numImagenes = 3 }) {
     const [cargando, setCargando] = useState(false);
 
     const iniciarJuegoAnagrama = async () => {
         setCargando(true);
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/juego1/');
+            const res = await axios.get(`${API_ENDPOINTS.ANAGRAMA}?cantidad=${numImagenes}`);
             alClickJugarAnagrama(res.data);
         } catch (err) {
             console.error("Error al obtener datos:", err);
@@ -40,7 +41,10 @@ function InstruccionesAnagrama({ alClickJugarAnagrama, alClickCasa, alClickRegre
                 <div className="instruction-card">
                     <p className="instruction-text">1. Mira la imagen y las letras desordenadas.</p>
                     <p className="instruction-text">2. Ordena las letras para formar la palabra correcta.</p>
-                    <p className="instruction-text">3. Lee la oracion especial que aparecera al terminar!</p>
+                    <p className="instruction-text">
+                        3. Resolverás {numImagenes} {numImagenes === 1 ? 'palabra' : 'palabras'} en total.
+                    </p>
+                    <p className="instruction-text">4. Lee la oración especial que aparecerá al terminar!</p>
                 </div>
                 <button
                     className="btn-primary"

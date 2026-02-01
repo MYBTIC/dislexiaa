@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../App.css';
 import PantallaReintentar from './PantallaReintentar';
 import PantallaFinal from './PantallaFinal';
+import { API_ENDPOINTS } from '../config/api';
 
 function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
     const [oracion, setOracion] = useState("");
@@ -21,7 +22,7 @@ function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
                 setCargando(true);
                 setTextoReconocido("Presiona el microfono y repite la oracion...");
                 try {
-                    const res = await axios.post('http://127.0.0.1:8000/api/oracion/', {
+                    const res = await axios.post(API_ENDPOINTS.ORACION, {
                         palabra: palabraActual.nombre
                     });
                     setOracion(res.data.oracion);

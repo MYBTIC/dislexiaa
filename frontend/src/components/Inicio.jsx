@@ -1,9 +1,19 @@
 import React from 'react';
 import '../App.css';
 
-function Inicio({ alClickJugar }) {
+function Inicio({ alClickJugar, alClickConfig }) {
     return (
         <div id="home-screen" className="screen active">
+            {/* Botón de configuración flotante */}
+            <button
+                className="btn-config-float"
+                onClick={alClickConfig}
+                aria-label="Configuración"
+                title="Configuración"
+            >
+                ⚙️
+            </button>
+
             <div className="content-center">
                 <div className="text-center">
                     <h1 className="title-main">Juego de Palabras</h1>

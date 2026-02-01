@@ -22,9 +22,11 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
     };
 
     const comprobarRespuesta = () => {
-        const preguntaActual = palabras[indice];
+        const palabraActual = palabras[indice];
+        // La respuesta correcta es la sílaba que está en el índice silaba_oculta
+        const respuestaCorrecta = palabraActual.silabas[palabraActual.silaba_oculta];
 
-        if (silabaSeleccionada === preguntaActual.respuesta_correcta) {
+        if (silabaSeleccionada === respuestaCorrecta) {
             setMostrarExito(true);
         } else {
             setIntentos(intentos + 1);
@@ -41,7 +43,7 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
         setMostrarError(false);
 
         // Si ya pasaron 3 intentos, ir a la oración
-        if (intentos >= 3) {
+        if (intentos >= 2) { // Cambiado a 2 para que sean 3 intentos en total
             alClickOracion();
         } else {
             // Resetear la selección para reintentar
@@ -50,16 +52,31 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
     };
 
     const reproducirAudio = () => {
-        // Implementar reproducción de audio si está disponible
+        // Usar Web Speech API para reproducir la palabra
         const palabraActual = palabras[indice];
-        if (palabraActual.audio) {
-            const audio = new Audio(palabraActual.audio);
-            audio.play();
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(palabraActual.nombre);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.8; // Velocidad más lenta para niños
+            window.speechSynthesis.speak(utterance);
         }
     };
 
     const palabraActual = palabras[indice];
     if (!palabraActual) return <div className="screen">Cargando juego...</div>;
+
+    // Construir la palabra incompleta (con ___ donde falta la sílaba)
+    const construirPalabraIncompleta = () => {
+        return palabraActual.silabas.map((silaba, idx) => {
+            if (idx === palabraActual.silaba_oculta) {
+                return '___';
+            }
+            return silaba;
+        }).join('');
+    };
+
+    // La respuesta correcta para mostrar en caso de error
+    const respuestaCorrecta = palabraActual.silabas[palabraActual.silaba_oculta];
 
     // Mostrar pantalla de éxito
     if (mostrarExito) {
@@ -72,7 +89,7 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
             <PantallaError
                 alClickCasa={alClickCasa}
                 alContinuar={continuarDespuesDeError}
-                respuestaCorrecta={palabraActual.nombre}
+                respuestaCorrecta={respuestaCorrecta}
                 tipoJuego="silabas"
                 intentos={intentos}
             />
@@ -103,11 +120,11 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
 
             <div className="content-center">
                 <div className="image-container">
-                    <img src={palabraActual.imagen} alt="Referencia visual" className="game-image"/>
+                    <img src={palabraActual.imagen} alt={palabraActual.nombre} className="game-image"/>
                 </div>
 
                 <div className="game-card-white">
-                    <h2 className="word-display">{palabraActual.palabra_incompleta}</h2>
+                    <h2 className="word-display">{construirPalabraIncompleta()}</h2>
 
                     <div className="syllables-options">
                         {palabraActual.opciones.map((silaba, index) => (
