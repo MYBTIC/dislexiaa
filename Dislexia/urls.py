@@ -16,8 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
+
+def api_home(request):
+    """Vista de bienvenida para la raíz del API"""
+    return JsonResponse({
+        'message': 'Bienvenido al API del Juego de Palabras',
+        'version': '1.0',
+        'endpoints': {
+            'anagramas': '/api/juego1/',
+            'silabas': '/api/juego2/',
+            'generar_oracion': '/api/oracion/ (POST)',
+            'admin': '/admin/'
+        },
+        'docs': 'Ver README.md para mas informacion'
+    })
 
 urlpatterns = [
+    path('', api_home, name='home'),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),  # Esto conecta las rutas de tu app api
 ]
+
+

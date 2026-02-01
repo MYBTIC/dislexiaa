@@ -750,6 +750,373 @@ body {
     box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* =====================================================
+   PANTALLAS DE RESULTADO MEJORADAS
+   ===================================================== */
+
+/* Base para todas las pantallas de resultado */
+.pantalla-resultado {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pantalla-resultado.activa {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Fondos específicos */
+.pantalla-exito {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #6ee7b7 100%);
+}
+
+.pantalla-error {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 50%, #fca5a5 100%);
+}
+
+.pantalla-reintentar {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+}
+
+/* Contenido central */
+.resultado-contenido {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 2rem;
+    padding: 3rem 4rem;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    width: 90%;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Icono de resultado */
+.icono-resultado {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1.5rem;
+    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.icono-resultado svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Títulos */
+.titulo-resultado {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.5s ease-out 0.2s both;
+}
+
+.titulo-exito {
+    color: #059669;
+}
+
+.titulo-error {
+    color: #dc2626;
+}
+
+.titulo-info {
+    color: #d97706;
+}
+
+.titulo-reintentar {
+    color: #d97706;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mensajes */
+.mensaje-resultado {
+    font-size: 1.25rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.5s ease-out 0.3s both;
+}
+
+/* Estrellas de éxito */
+.estrellas-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.estrella {
+    font-size: 3rem;
+    color: #fbbf24;
+    animation: starPop 0.5s ease-out both;
+    text-shadow: 0 4px 8px rgba(251, 191, 36, 0.4);
+}
+
+.estrella:nth-child(1) { animation-delay: 0.4s; }
+.estrella:nth-child(2) { animation-delay: 0.5s; }
+.estrella:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes starPop {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Card de respuesta correcta */
+.respuesta-correcta-card {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.5s ease-out 0.3s both;
+}
+
+.label-respuesta {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.palabra-correcta {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #334155;
+    text-transform: capitalize;
+}
+
+/* Intentos restantes */
+.intentos-restantes {
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.5s ease-out 0.4s both;
+}
+
+.intentos-restantes p {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.barra-intentos {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.barra-progreso {
+    height: 100%;
+    background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+/* Mensaje motivacional */
+.mensaje-motivacional {
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.5s ease-out 0.3s both;
+}
+
+.tip-resultado {
+    font-size: 1rem;
+    color: #d97706;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: #fef3c7;
+    border-radius: 0.5rem;
+}
+
+/* Contenedor de botones */
+.botones-resultado {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    animation: fadeInUp 0.5s ease-out 0.5s both;
+}
+
+/* Botones de resultado */
+.btn-resultado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-exito {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-exito:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(16, 185, 129, 0.5);
+}
+
+.btn-reintentar, .btn-reintentar-principal {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+}
+
+.btn-reintentar:hover, .btn-reintentar-principal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(245, 158, 11, 0.5);
+}
+
+.btn-continuar-error {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-continuar-error:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.5);
+}
+
+.btn-home-secundario {
+    background: transparent;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+}
+
+.btn-home-secundario:hover {
+    background: #f1f5f9;
+    color: #334155;
+    border-color: #cbd5e1;
+}
+
+/* Confeti */
+.confeti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.confeti {
+    position: absolute;
+    top: -20px;
+    width: 12px;
+    height: 12px;
+    animation: confetiFall 3s linear infinite;
+}
+
+.confeti-0 { background: #ef4444; border-radius: 50%; }
+.confeti-1 { background: #f59e0b; border-radius: 2px; }
+.confeti-2 { background: #10b981; border-radius: 50%; }
+.confeti-3 { background: #3b82f6; border-radius: 2px; }
+.confeti-4 { background: #8b5cf6; border-radius: 50%; }
+
+@keyframes confetiFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Spinner de carga */
+.loading-spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.loading-spinner::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estilos para sílabas */
+.silaba-visible {
+    color: #334155;
+}
+
+.silaba-oculta {
+    color: #3b82f6;
+    font-weight: 700;
+    padding: 0 0.25rem;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-radius: 0.5rem;
+    margin: 0 0.1rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .title-main {
@@ -780,5 +1147,147 @@ body {
 
     .word-display {
         font-size: 2.5rem;
+    }
+
+    .resultado-contenido {
+        padding: 2rem;
+    }
+
+    .titulo-resultado {
+        font-size: 2rem;
+    }
+
+    .icono-resultado {
+        width: 80px;
+        height: 80px;
+    }
+
+    .btn-resultado {
+        padding: 0.875rem 1.5rem;
+        font-size: 1.1rem;
+    }
+}
+
+/* =====================================================
+   PANTALLA FINAL DE FELICITACIONES
+   ===================================================== */
+
+.pantalla-final {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 30%, #fbbf24 70%, #f59e0b 100%);
+}
+
+.resultado-final {
+    max-width: 550px;
+}
+
+.trofeo-container {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    animation: trofeoEntrada 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.trofeo-icono {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 10px 20px rgba(245, 158, 11, 0.5));
+}
+
+@keyframes trofeoEntrada {
+    0% {
+        transform: scale(0) rotate(-30deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.3) rotate(10deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.titulo-final {
+    color: #92400e;
+    font-size: 3rem;
+}
+
+.estadisticas-final {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+    animation: fadeInUp 0.5s ease-out 0.4s both;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 1rem;
+}
+
+.stat-numero {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #92400e;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #b45309;
+    margin-top: 0.25rem;
+}
+
+.estrellas-final {
+    margin: 1.5rem 0 2rem;
+}
+
+.estrella-grande {
+    font-size: 4rem;
+}
+
+.btn-volver-inicio {
+    background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(146, 64, 14, 0.4);
+}
+
+.btn-volver-inicio:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(146, 64, 14, 0.5);
+}
+
+/* Micrófono activo */
+.mic-activo {
+    animation: micPulso 1s ease-in-out infinite;
+    background: #dc2626 !important;
+}
+
+@keyframes micPulso {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 8px 30px rgba(255, 71, 87, 0.5), 0 0 0 10px rgba(255, 71, 87, 0.2);
+    }
+}
+
+/* Loading text animado */
+.loading-text {
+    color: #94a3b8;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
     }
 }

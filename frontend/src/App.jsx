@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Inicio from './components/Inicio';
 import SeleccionModos from './components/SeleccionModos';
 import ModoAnagrama from './components/ModoAnagrama';
@@ -11,6 +11,7 @@ import './App.css';
 
 
 function App() {
+
     // Estado para controlar qué pantalla ver (home por defecto)
     const [pantallaActiva, setPantallaActiva] = useState('home');
 
@@ -50,6 +51,7 @@ function App() {
 
     return (
         <div className="App">
+
             {/* Lógica de navegación condicional */}
 
             {pantallaActiva === 'home' && (

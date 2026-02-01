@@ -1,21 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../App.css';
 import PantallaReintentar from './PantallaReintentar';
+import PantallaFinal from './PantallaFinal';
 
-function Oracion({palabras, indice, alClickCasa, alClickJugarAnagrama}) {
+function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
     const [oracion, setOracion] = useState("");
-    const [cargando, setCargando] = useState(false); // Estado para controlar la carga
-    const [textoReconocido, setTextoReconocido] = useState("Presiona el micro y repite la oración...");
+    const [cargando, setCargando] = useState(false);
+    const [textoReconocido, setTextoReconocido] = useState("Presiona el microfono y repite la oracion...");
     const [mostrarReintentar, setMostrarReintentar] = useState(false);
+    const [mostrarFinal, setMostrarFinal] = useState(false);
+    const [escuchando, setEscuchando] = useState(false);
 
     const palabraActual = palabras[indice];
 
     useEffect(() => {
         const obtenerOracion = async () => {
             if (palabraActual) {
-                setOracion(""); // Limpiamos la oración anterior inmediatamente
-                setCargando(true); // Iniciamos la animación de carga
+                setOracion("");
+                setCargando(true);
+                setTextoReconocido("Presiona el microfono y repite la oracion...");
                 try {
                     const res = await axios.post('http://127.0.0.1:8000/api/oracion/', {
                         palabra: palabraActual.nombre
@@ -23,9 +27,9 @@ function Oracion({palabras, indice, alClickCasa, alClickJugarAnagrama}) {
                     setOracion(res.data.oracion);
                 } catch (err) {
                     console.error("Error con Gemini:", err);
-                    setOracion(`Mira la ${palabraActual.nombre} que está en la mesa.`);
+                    setOracion(`Mira el ${palabraActual.nombre} que esta en la mesa`);
                 } finally {
-                    setCargando(false); // Finalizamos la carga
+                    setCargando(false);
                 }
             }
         };
@@ -35,7 +39,6 @@ function Oracion({palabras, indice, alClickCasa, alClickJugarAnagrama}) {
 
     // Uso de micrófono
     const activarMicrofono = () => {
-        // 1. Verificamos si el navegador soporta el reconocimiento de voz
         const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
         if (!Recognition) {
@@ -44,41 +47,39 @@ function Oracion({palabras, indice, alClickCasa, alClickJugarAnagrama}) {
         }
 
         const recognition = new Recognition();
-        recognition.lang = 'es-ES'; // Idioma español
-        recognition.interimResults = false; // Solo muestra el resultado final
-        recognition.continuous = false; // Se detiene al terminar de hablar
+        recognition.lang = 'es-ES';
+        recognition.interimResults = false;
+        recognition.continuous = false;
 
-        // Evento que se dispara cuando el micro empieza a escuchar
         recognition.onstart = () => {
-            setTextoReconocido("Escuchando... 🎙️");
+            setEscuchando(true);
+            setTextoReconocido("Escuchando...");
         };
 
-        // Evento que captura el resultado de la voz
         recognition.onresult = (event) => {
             const vozCapturada = event.results[0][0].transcript;
-
-            // Aplicamos el formato de Mayúscula y Punto
             const textoConFormato = formatearTexto(vozCapturada);
-
-            // Guardamos el resultado final formateado
             setTextoReconocido(textoConFormato);
+            setEscuchando(false);
         };
 
-        // Evento por si ocurre un error (silencio prolongado o bloqueo de micro)
         recognition.onerror = (event) => {
             console.error("Error de micro:", event.error);
             setTextoReconocido("No se pudo escuchar nada, intenta de nuevo.");
+            setEscuchando(false);
         };
 
-        recognition.start(); // Inicia el proceso de escucha
+        recognition.onend = () => {
+            setEscuchando(false);
+        };
+
+        recognition.start();
     };
 
     const formatearTexto = (texto) => {
         if (!texto) return "";
         let t = texto.trim();
-        // Poner mayúscula inicial
         t = t.charAt(0).toUpperCase() + t.slice(1);
-        // Añadir punto final si no tiene
         if (!t.endsWith('.')) {
             t += '.';
         }
@@ -100,25 +101,32 @@ function Oracion({palabras, indice, alClickCasa, alClickJugarAnagrama}) {
         if (indice < palabras.length - 1) {
             alClickJugarAnagrama(indice + 1);
         } else {
-            alert("¡Felicidades! Completaste todas las palabras. 🎉");
-            alClickCasa();
+            setMostrarFinal(true);
         }
     };
 
-    const validarOracion = () =>{
-        if (oracion === textoReconocido){
+    const validarOracion = () => {
+        // Normalizar ambas cadenas para comparación más flexible
+        const normalizar = (str) => str.toLowerCase().replace(/[.,!?]/g, '').trim();
+
+        if (normalizar(oracion) === normalizar(textoReconocido)) {
             controlarFinJuego();
-        } else{
+        } else {
             setMostrarReintentar(true);
         }
     };
 
     const intentarDeNuevo = () => {
         setMostrarReintentar(false);
-        setTextoReconocido("Presiona el micro y repite la oración...");
+        setTextoReconocido("Presiona el microfono y repite la oracion...");
     };
 
     if (!palabraActual) return <div className="screen">Cargando juego...</div>;
+
+    // Mostrar pantalla final
+    if (mostrarFinal) {
+        return <PantallaFinal alClickCasa={alClickCasa} totalPalabras={palabras.length} />;
+    }
 
     // Mostrar pantalla de reintentar
     if (mostrarReintentar) {
@@ -152,7 +160,7 @@ function Oracion({palabras, indice, alClickCasa, alClickJugarAnagrama}) {
                         <div className="sentence-header">
                             <h2 className="main-sentence">
                                 {cargando ? (
-                                    <span className="loading-text">Se está creando tu oración... ✨</span>
+                                    <span className="loading-text">Se esta creando tu oracion...</span>
                                 ) : (
                                     renderizarOracion(oracion, palabraActual.nombre)
                                 )}
@@ -160,13 +168,17 @@ function Oracion({palabras, indice, alClickCasa, alClickJugarAnagrama}) {
                         </div>
 
                         <div className="transcript-display">
-                            <p className="text-placeholder">
+                            <p className={`text-placeholder ${textoReconocido.includes('Escuchando') ? 'text-active' : ''}`}>
                                 {textoReconocido}
                             </p>
                         </div>
 
                         <div className="actions-row">
-                            <button className="btn-mic game-card-btn" onClick={activarMicrofono}>
+                            <button
+                                className={`btn-mic game-card-btn ${escuchando ? 'mic-activo' : ''}`}
+                                onClick={activarMicrofono}
+                                disabled={escuchando}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                                      strokeLinejoin="round">

@@ -1,22 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../App.css';
-import { palabrasSilabas } from '../data/datosSilabas';
-// import axios from "axios";
+import axios from "axios";
 
+function InstruccionesSilabas({ alClickCasa, alClickRegresar, alClickJugarSilabas }) {
+    const [cargando, setCargando] = useState(false);
 
-function InstruccionesSilabas({ alClickCasa, alClickRegresar, alClickJugarSilabas}) {
-
-    const iniciarJuegoSilabas = () => {
-        // Por ahora usamos los datos de prueba en lugar del API
-        alClickJugarSilabas(palabrasSilabas);
-
-        // Código comentado para cuando el API esté listo:
-        // try {
-        //     const res = await axios.get('http://127.0.0.1:8000/api/juego2/');
-        //     alClickJugarSilabas(res.data);
-        // } catch (err) {
-        //     console.error("Error al obtener datos:", err);
-        // }
+    const iniciarJuegoSilabas = async () => {
+        setCargando(true);
+        try {
+            const res = await axios.get('http://127.0.0.1:8000/api/juego2/');
+            alClickJugarSilabas(res.data);
+        } catch (err) {
+            console.error("Error al obtener datos:", err);
+            alert("Error al cargar el juego. Intenta de nuevo.");
+        } finally {
+            setCargando(false);
+        }
     };
 
     return (
@@ -36,14 +35,22 @@ function InstruccionesSilabas({ alClickCasa, alClickRegresar, alClickJugarSilaba
                 </svg>
             </button>
             <div className="content-center">
-                <h1 className="title">¿Cómo jugar? 📝</h1>
+                <h1 className="title">Como jugar?</h1>
                 <div className="instruction-card">
-                    <p className="instruction-text">1. Se te mostrará una imagen y una palabra incompleta.</p>
-                    <p className="instruction-text">2. Tu tarea es elegir la sílaba correcta que falta para completar la palabra.</p>
-                    <p className="instruction-text">3. Responderás 10 palabras en total.</p>
+                    <p className="instruction-text">1. Se te mostrara una imagen y una palabra incompleta.</p>
+                    <p className="instruction-text">2. Tu tarea es elegir la silaba correcta que falta para completar la palabra.</p>
+                    <p className="instruction-text">3. Responderas 5 palabras en total.</p>
                 </div>
-                <button className="btn-primary" onClick={iniciarJuegoSilabas}>
-                    Empezar ▶️
+                <button
+                    className="btn-primary"
+                    onClick={iniciarJuegoSilabas}
+                    disabled={cargando}
+                >
+                    {cargando ? (
+                        <span className="loading-spinner">Cargando palabras...</span>
+                    ) : (
+                        "Empezar"
+                    )}
                 </button>
             </div>
         </div>
