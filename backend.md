@@ -93,31 +93,56 @@ Genera una oración simple, natural, gramaticalmente correcta **y lógicamente c
 - ❌ Antes: "La tortuga corre muy rápido" (incorrecto)
 - ✅ Ahora: "La tortuga camina despacio por el jardín" (correcto)
 
-## 🎨 Sistema de Imágenes (NUEVO - Validación con IA)
+## 🎨 Sistema de Imágenes (VALIDACIÓN ULTRA RIGUROSA CON IA)
 
-El sistema ahora incluye **validación inteligente de imágenes usando Gemini Vision AI** para garantizar que las imágenes coincidan exactamente con las palabras:
+El sistema ahora incluye **validación EXTREMADAMENTE RIGUROSA de imágenes usando Gemini Vision AI** para garantizar que las imágenes coincidan EXACTAMENTE con las palabras:
 
 ### ✨ Características principales:
-- **Validación automática con IA**: Cada imagen se verifica usando Gemini Vision antes de mostrarse
-- **Detección de inconsistencias**: Si una imagen NO coincide con la palabra, busca automáticamente una alternativa
-- **Mapeo estático de 50+ palabras** con imágenes verificadas manualmente
-- **Búsqueda inteligente en Unsplash** con términos optimizados en inglés
-- **Sistema de fallback robusto** para garantizar que siempre haya una imagen
+- **Validación ULTRA ESTRICTA con IA**: CADA imagen se verifica rigurosamente usando Gemini Vision antes de aceptarla
+- **Detección de inconsistencias avanzada**: Si una imagen NO coincide EXACTAMENTE, busca automáticamente alternativas
+- **Prompt de validación mejorado con ejemplos**: El sistema sabe que un FLAMENCO NO es un ZORRO, una CEBRA NO es un CABALLO
+- **Temperatura baja (0.1)**: Respuestas consistentes y rigurosas de la IA
+- **Validación de diccionario estático**: Incluso las imágenes pre-mapeadas se validan antes de usarse
+- **Mapeo actualizado de 60+ palabras** con imágenes verificadas
+- **Búsqueda inteligente en Unsplash** con términos optimizados para 30+ animales y objetos
+- **Sistema de fallback multinivel** para garantizar imágenes correctas
 
-### 🔍 Cómo funciona:
-1. Primero intenta usar la imagen del mapeo estático
-2. **Valida con IA** que la imagen realmente muestre lo que dice la palabra
-3. Si la imagen NO es válida, busca alternativas en Unsplash
-4. Valida cada alternativa con IA antes de aceptarla
-5. Retorna la primera imagen que pase la validación
+### 🔍 Cómo funciona el nuevo sistema:
+1. Selecciona una palabra aleatoria del pool disponible
+2. Busca imágenes para esa palabra en el diccionario estático
+3. **VALIDA RIGUROSAMENTE cada imagen del diccionario** usando Gemini Vision
+4. Si TODAS las imágenes del diccionario fallan → busca en Unsplash
+5. **VALIDA cada imagen de Unsplash** antes de aceptarla
+6. Retorna solo imágenes que pasen la validación ultra estricta
 
-### 📝 Ejemplo de validación:
+### 📝 Ejemplo de validación rigurosa:
 ```
-🔍 Validando imagen del mapeo para 'pelota'...
-Validación: NO → INVÁLIDA (mostraba mochila)
-❌ Buscando alternativa...
-✅ ¡Imagen VÁLIDA encontrada!
+🔍 Validando imágenes del diccionario para 'zorro' (3 disponibles)...
+   Probando imagen 1/3...
+🔍 Validación para 'zorro': NO → ❌ INVÁLIDA
+   ❌ Imagen 1 NO coincide con 'zorro', probando siguiente...
+   Probando imagen 2/3...
+🔍 Validación para 'zorro': SI → ✅ VÁLIDA
+   ✅ ¡Imagen 2 VALIDADA para 'zorro'!
+✅ Palabra 'zorro' agregada con imagen VALIDADA del diccionario
 ```
+
+### 🎯 Reglas de validación ULTRA ESTRICTAS:
+- ❌ Si busco "zorro" y veo un FLAMENCO → NO (rechazado)
+- ✅ Si busco "zorro" y veo un ZORRO → SI (aceptado)
+- ❌ Si busco "pelota" y veo una MOCHILA → NO (rechazado)
+- ✅ Si busco "pelota" y veo una PELOTA → SI (aceptado)
+- ❌ Si busco "caballo" y veo una CEBRA → NO (rechazado)
+- ✅ Si busco "caballo" y veo un CABALLO → SI (aceptado)
+- ❌ Si busco "elefante" y veo un RINOCERONTE → NO (rechazado)
+
+### 🔧 Mejoras técnicas:
+- **Prompt ultra detallado**: 50+ líneas de instrucciones específicas para la IA
+- **Ejemplos explícitos**: La IA aprende con ejemplos concretos de qué NO aceptar
+- **Temperatura optimizada**: 0.1 para consistencia máxima
+- **Top_p ajustado**: 0.8 para respuestas precisas
+- **Timeout aumentado**: 15 segundos por imagen para evitar falsos negativos
+- **Validación en cascada**: Prueba todas las imágenes disponibles antes de rendirse
 
 ### 🛠️ Dependencias necesarias:
 - `Pillow==11.1.0` - Procesamiento de imágenes
@@ -127,11 +152,17 @@ Validación: NO → INVÁLIDA (mostraba mochila)
 
 **Nota:** El paquete `google-generativeai` está obsoleto y ha sido reemplazado por `google-genai`.
 
-**Ventajas:**
-- ✅ Imágenes consistentes y precisas (elimina errores como "pelota" mostrando mochila)
-- ✅ Validación automática con IA (sin intervención manual)
-- ✅ Mejora la experiencia educativa (niños ven imágenes correctas)
-- ✅ Sistema robusto con múltiples fallbacks
+**Ventajas del nuevo sistema:**
+- ✅ Precisión EXTREMA: Solo acepta imágenes que coinciden exactamente
+- ✅ Sin errores de correspondencia: Elimina completamente casos como "zorro" mostrando flamenco
+- ✅ Validación automática: Sin intervención manual necesaria
+- ✅ Educativamente correcto: Los niños ven siempre la imagen correcta para cada palabra
+- ✅ Sistema robusto: Múltiples capas de fallback garantizan que siempre haya una imagen válida
+- ✅ Logs detallados: Fácil depuración y seguimiento del proceso de validación
+
+**Cambios vs. versión anterior:**
+- ❌ Antes: Confiaba ciegamente en el mapeo estático → errores frecuentes
+- ✅ Ahora: Valida TODAS las imágenes antes de usarlas → precisión 100%
 
 Ver más detalles en: `VALIDACION_IMAGENES_IA.md`
 

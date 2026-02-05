@@ -11,6 +11,39 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
     const [mostrarError, setMostrarError] = useState(false);
     const [mostrarIntentosAgotados, setMostrarIntentosAgotados] = useState(false);
     const [intentos, setIntentos] = useState(0);
+    const [imagenCargando, setImagenCargando] = useState(false);
+    const [reintentoImagen, setReintentoImagen] = useState(0);
+
+    // Función para manejar error de carga de imagen
+    const manejarErrorImagen = async (e) => {
+        console.log("⚠️ Error cargando imagen, intentando recargar...");
+
+        // Reintentar carga de imagen hasta 3 veces
+        if (reintentoImagen < 3) {
+            setReintentoImagen(prev => prev + 1);
+            setImagenCargando(true);
+
+            // Esperar un momento antes de reintentar
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Forzar recarga agregando timestamp
+            const timestamp = new Date().getTime();
+            e.target.src = `${palabras[indice].imagen}${palabras[indice].imagen.includes('?') ? '&' : '?'}t=${timestamp}`;
+
+            setImagenCargando(false);
+        } else {
+            // Si falla después de 3 intentos, usar imagen de respaldo genérica
+            console.error("❌ No se pudo cargar la imagen después de 3 intentos");
+            e.target.src = "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=400&fit=crop";
+        }
+    };
+
+    // Función para manejar carga exitosa de imagen
+    const manejarCargaExitosa = () => {
+        setImagenCargando(false);
+        setReintentoImagen(0);
+        console.log("✅ Imagen cargada correctamente");
+    };
 
     useEffect(() => {
         // Resetear la selección cuando cambie la palabra
@@ -120,7 +153,7 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
         <div id="syllables-game-screen" className="screen">
             <button className="home-btn top-left game-card-btn" onClick={alClickCasa} aria-label="Ir al inicio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
@@ -128,7 +161,7 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
 
             <button className="audio-btn top-right game-card-btn" onClick={reproducirAudio} aria-label="Reproducir audio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
                     <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                 </svg>
@@ -140,11 +173,23 @@ function ModoSilabas({palabras, indice, alClickCasa, alClickOracion}) {
 
             <div className="content-center">
                 <div className="image-container">
-                    <img src={palabraActual.imagen} alt={palabraActual.nombre} className="game-image"/>
+                    {imagenCargando && (
+                        <div className="loading-overlay">
+                            <div className="loading-spinner">Cargando imagen...</div>
+                        </div>
+                    )}
+                    <img
+                        src={palabraActual.imagen}
+                        alt={palabraActual.nombre}
+                        className="game-image"
+                        onError={manejarErrorImagen}
+                        onLoad={manejarCargaExitosa}
+                        style={{ opacity: imagenCargando ? 0.5 : 1 }}
+                    />
                 </div>
 
                 <div className="game-card-white">
-                    <h2 className="word-display">{construirPalabraIncompleta()}</h2>
+                    <h2 className="word-display" tabIndex="0">{construirPalabraIncompleta()}</h2>
 
                     <div className="syllables-options">
                         {palabraActual.opciones.map((silaba, index) => (

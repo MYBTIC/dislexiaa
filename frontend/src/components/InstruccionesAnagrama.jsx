@@ -3,6 +3,7 @@ import '../App.css';
 import axios from "axios";
 import { API_ENDPOINTS } from '../config/api';
 import Modal from './Modal';
+import PantallaCarga from './PantallaCarga';
 
 function InstruccionesAnagrama({ alClickJugarAnagrama, alClickCasa, alClickRegresar, numImagenes = 3 }) {
     const [cargando, setCargando] = useState(false);
@@ -32,42 +33,43 @@ function InstruccionesAnagrama({ alClickJugarAnagrama, alClickCasa, alClickRegre
         }
     };
 
+    // Mostrar pantalla de carga mientras se obtienen las palabras
+    if (cargando) {
+        return <PantallaCarga mensaje="Preparando palabras..." />;
+    }
+
     return (
-        <div id="anagram-instructions-screen" className="screen">
-            <button className="home-btn top-left game-card-btn" onClick={alClickCasa}>
+        <div id="anagram-instructions-screen" className="screen">{/* ...existing code... */}
+            <button className="home-btn top-left game-card-btn" onClick={alClickCasa} aria-label="Ir al inicio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
             </button>
-            <button className="regresar-btn top-left_2 game-card-btn" onClick={alClickRegresar}>
+            <button className="regresar-btn top-left_2 game-card-btn" onClick={alClickRegresar} aria-label="Regresar a selección de modos">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="m12 19-7-7 7-7"/>
                     <path d="M19 12H5"/>
                 </svg>
             </button>
             <div className="content-center">
-                <h1 className="title">Como jugar?</h1>
+                <h1 className="title" tabIndex="0">Como jugar?</h1>
                 <div className="instruction-card">
-                    <p className="instruction-text">1. Mira la imagen y las letras desordenadas.</p>
-                    <p className="instruction-text">2. Ordena las letras para formar la palabra correcta.</p>
-                    <p className="instruction-text">
+                    <p className="instruction-text" tabIndex="0">1. Mira la imagen y las letras desordenadas.</p>
+                    <p className="instruction-text" tabIndex="0">2. Ordena las letras para formar la palabra correcta.</p>
+                    <p className="instruction-text" tabIndex="0">
                         3. Resolverás {numImagenes} {numImagenes === 1 ? 'palabra' : 'palabras'} en total.
                     </p>
-                    <p className="instruction-text">4. Lee la oración especial que aparecerá al terminar!</p>
+                    <p className="instruction-text" tabIndex="0">4. Lee la oración especial que aparecerá al terminar!</p>
                 </div>
                 <button
                     className="btn-primary"
                     onClick={iniciarJuegoAnagrama}
-                    disabled={cargando}
+                    aria-label="Empezar juego de anagrama"
                 >
-                    {cargando ? (
-                        <span className="loading-spinner">Cargando palabras...</span>
-                    ) : (
-                        "Empezar"
-                    )}
+                    Empezar
                 </button>
             </div>
 

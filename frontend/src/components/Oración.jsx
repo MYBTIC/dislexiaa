@@ -12,8 +12,36 @@ function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
     const [mostrarReintentar, setMostrarReintentar] = useState(false);
     const [mostrarFinal, setMostrarFinal] = useState(false);
     const [escuchando, setEscuchando] = useState(false);
+    const [imagenCargando, setImagenCargando] = useState(false);
+    const [reintentoImagen, setReintentoImagen] = useState(0);
 
     const palabraActual = palabras[indice];
+
+    // Función para manejar error de carga de imagen
+    const manejarErrorImagen = async (e) => {
+        console.log("⚠️ Error cargando imagen, intentando recargar...");
+
+        if (reintentoImagen < 3) {
+            setReintentoImagen(prev => prev + 1);
+            setImagenCargando(true);
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            const timestamp = new Date().getTime();
+            e.target.src = `${palabraActual.imagen}${palabraActual.imagen.includes('?') ? '&' : '?'}t=${timestamp}`;
+
+            setImagenCargando(false);
+        } else {
+            console.error("❌ No se pudo cargar la imagen después de 3 intentos");
+            e.target.src = "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=400&fit=crop";
+        }
+    };
+
+    const manejarCargaExitosa = () => {
+        setImagenCargando(false);
+        setReintentoImagen(0);
+        console.log("✅ Imagen cargada correctamente");
+    };
 
     useEffect(() => {
         const obtenerOracion = async () => {
@@ -136,9 +164,9 @@ function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
 
     return (
         <div id="anagram-game-screen" className="screen">
-            <button className="home-btn top-left game-card-btn" onClick={alClickCasa}>
+            <button className="home-btn top-left game-card-btn" onClick={alClickCasa} aria-label="Ir al inicio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
@@ -151,15 +179,27 @@ function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
             <div className="game-main-container">
                 <div className="left-panel-small">
                     <div className="image-container-v2">
-                        <img src={palabraActual.imagen} alt="Juego" className="game-image-v2"/>
+                        {imagenCargando && (
+                            <div className="loading-overlay">
+                                <div className="loading-spinner">Cargando imagen...</div>
+                            </div>
+                        )}
+                        <img
+                            src={palabraActual.imagen}
+                            alt="Juego"
+                            className="game-image-v2"
+                            onError={manejarErrorImagen}
+                            onLoad={manejarCargaExitosa}
+                            style={{ opacity: imagenCargando ? 0.5 : 1 }}
+                        />
                     </div>
-                    <h1 className="word-title">{palabraActual.nombre}</h1>
+                    <h1 className="word-title" tabIndex="0">{palabraActual.nombre}</h1>
                 </div>
 
                 <div className="right-panel-large">
                     <div className="sentence-layout">
                         <div className="sentence-header">
-                            <h2 className="main-sentence">
+                            <h2 className="main-sentence" tabIndex="0">
                                 {cargando ? (
                                     <span className="loading-text">Se esta creando tu oracion...</span>
                                 ) : (
@@ -169,7 +209,7 @@ function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
                         </div>
 
                         <div className="transcript-display">
-                            <p className={`text-placeholder ${textoReconocido.includes('Escuchando') ? 'text-active' : ''}`}>
+                            <p className={`text-placeholder ${textoReconocido.includes('Escuchando') ? 'text-active' : ''}`} tabIndex="0">
                                 {textoReconocido}
                             </p>
                         </div>
@@ -179,21 +219,22 @@ function Oracion({ palabras, indice, alClickCasa, alClickJugarAnagrama }) {
                                 className={`btn-mic game-card-btn ${escuchando ? 'mic-activo' : ''}`}
                                 onClick={activarMicrofono}
                                 disabled={escuchando}
+                                aria-label={escuchando ? "Escuchando..." : "Activar micrófono para grabar voz"}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
+                                     strokeLinejoin="round" aria-hidden="true">
                                     <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
                                     <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
                                     <line x1="12" x2="12" y1="19" y2="22"></line>
                                 </svg>
                             </button>
 
-                            <button className="btn-continue game-card-btn" onClick={validarOracion} disabled={cargando}>
+                            <button className="btn-continue game-card-btn" onClick={validarOracion} disabled={cargando} aria-label="Continuar al siguiente ejercicio">
                                 <span>Continuar</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
+                                     strokeLinejoin="round" aria-hidden="true">
                                     <path d="m9 18 6-6-6-6"/>
                                 </svg>
                             </button>

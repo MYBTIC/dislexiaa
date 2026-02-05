@@ -12,12 +12,12 @@ function PantallaCorrecta({ alContinuar }) {
     }, [alContinuar]);
 
     return (
-        <div className="screen success-overlay">
+        <div className="screen success-overlay" role="alert" aria-live="assertive">
             <div className="content-center">
-                <div className="success-icon">🎉</div>
-                <h1 className="title success-title">¡Correcto!</h1>
+                <div className="success-icon" aria-hidden="true" tabIndex="0">🎉</div>
+                <h1 className="title success-title" tabIndex="0">¡Correcto!</h1>
                 <div className="success-card">
-                    <p className="success-text">¡Excelente trabajo!</p>
+                    <p className="success-text" tabIndex="0">¡Excelente trabajo!</p>
                 </div>
             </div>
         </div>

@@ -19,10 +19,10 @@ function PantallaIntentosAgotados({ palabraActual, alContinuar }) {
     if (!palabraActual) return null;
 
     return (
-        <div className="pantalla-intentos-agotados">
+        <div className="pantalla-intentos-agotados" role="alert" aria-live="assertive">
             <div className="contenido-intentos">
-                <div className="icono-intentos">😊</div>
-                <h2 className="titulo-intentos">La respuesta correcta es:</h2>
+                <div className="icono-intentos" aria-hidden="true" tabIndex="0">😊</div>
+                <h2 className="titulo-intentos" tabIndex="0">La respuesta correcta es:</h2>
 
                 <div className="tarjeta-respuesta">
                     <img
@@ -30,11 +30,11 @@ function PantallaIntentosAgotados({ palabraActual, alContinuar }) {
                         alt={palabraActual.nombre}
                         className="imagen-respuesta"
                     />
-                    <p className="palabra-respuesta">{palabraActual.nombre}</p>
+                    <p className="palabra-respuesta" tabIndex="0">{palabraActual.nombre}</p>
                 </div>
 
                 <div className="mensaje-animo">
-                    <p>¡Sigue intentando, lo estás haciendo muy bien! 💪</p>
+                    <p tabIndex="0">¡Sigue intentando, lo estás haciendo muy bien! 💪</p>
                 </div>
 
                 {/* Indicador de progreso */}

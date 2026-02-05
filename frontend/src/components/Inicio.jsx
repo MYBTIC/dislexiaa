@@ -16,10 +16,10 @@ function Inicio({ alClickJugar, alClickConfig }) {
 
             <div className="content-center">
                 <div className="text-center">
-                    <h1 className="title-main">Juego de Palabras</h1>
-                    <p className="subtitle">Aprende jugando con las letras!</p>
+                    <h1 className="title-main" tabIndex="0">Juego de Palabras</h1>
+                    <p className="subtitle" tabIndex="0">Aprende jugando con las letras!</p>
                 </div>
-                <button className="btn-primary btn-large game-card-btn" onClick={alClickJugar}>
+                <button className="btn-primary btn-large game-card-btn" onClick={alClickJugar} aria-label="Empezar a jugar">
                     Empezar
                 </button>
             </div>

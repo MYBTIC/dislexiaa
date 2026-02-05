@@ -84,9 +84,9 @@ const EjemplosModal = () => {
             >
                 {/* Contenido personalizado */}
                 <div className="modal-contenido-personalizado">
-                    <p><strong>Versión:</strong> 1.0.0</p>
-                    <p><strong>Autor:</strong> Maximiliano Madrid</p>
-                    <p><strong>Proyecto:</strong> Sistema de Dislexia</p>
+                    <p tabIndex="0"><strong>Versión:</strong> 1.0.0</p>
+                    <p tabIndex="0"><strong>Autor:</strong> Maximiliano Madrid</p>
+                    <p tabIndex="0"><strong>Proyecto:</strong> Sistema de Dislexia</p>
                 </div>
             </Modal>
         </div>

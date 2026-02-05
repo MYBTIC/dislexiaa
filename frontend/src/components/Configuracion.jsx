@@ -35,16 +35,17 @@ function Configuracion({ alClickRegresar, numImagenesActual, alGuardarConfig }) 
                                 <span className="config-label-text">Número de palabras por juego:</span>
                             </label>
 
-                            <div className="config-number-selector">
+                            <div className="config-number-selector" role="group" aria-label="Selector de número de palabras">
                                 <button
                                     className="btn-number-change"
                                     onClick={() => setNumImagenes(Math.max(2, numImagenes - 1))}
                                     disabled={numImagenes <= 2}
+                                    aria-label={`Disminuir número de palabras, actual: ${numImagenes}`}
                                 >
                                     −
                                 </button>
 
-                                <div className="number-display">
+                                <div className="number-display" aria-live="polite">
                                     <span className="number-value">{numImagenes}</span>
                                     <span className="number-label">palabras</span>
                                 </div>
@@ -53,6 +54,7 @@ function Configuracion({ alClickRegresar, numImagenesActual, alGuardarConfig }) 
                                     className="btn-number-change"
                                     onClick={() => setNumImagenes(Math.min(8, numImagenes + 1))}
                                     disabled={numImagenes >= 8}
+                                    aria-label={`Aumentar número de palabras, actual: ${numImagenes}`}
                                 >
                                     +
                                 </button>
@@ -71,8 +73,8 @@ function Configuracion({ alClickRegresar, numImagenesActual, alGuardarConfig }) 
 
                         <div className="config-info">
                             <div className="info-card">
-                                <span className="info-icon">ℹ️</span>
-                                <div className="info-text">
+                                <span className="info-icon" tabIndex="0">ℹ️</span>
+                                <div className="info-text" tabIndex="0">
                                     <strong>Nota:</strong> El cambio se aplicará en la próxima partida
                                 </div>
                             </div>
@@ -83,12 +85,14 @@ function Configuracion({ alClickRegresar, numImagenesActual, alGuardarConfig }) 
                         <button
                             className="btn-secondary btn-large"
                             onClick={alClickRegresar}
+                            aria-label="Cancelar cambios y volver"
                         >
                             Cancelar
                         </button>
                         <button
                             className="btn-primary btn-large"
                             onClick={handleGuardar}
+                            aria-label="Guardar cambios de configuración"
                         >
                             💾 Guardar Cambios
                         </button>

@@ -71,8 +71,8 @@ const SeleccionModos = ({ iniciarJuegoAnagrama, iniciarJuegoSilabas, numImagenes
 
     return (
         <div className="seleccion-modos">
-            <h1>Selecciona un Modo de Juego</h1>
-            
+            <h1 tabIndex="0">Selecciona un Modo de Juego</h1>
+
             <div className="botones-modos">
                 <button onClick={cargarJuegoAnagrama}>
                     🔤 Modo Anagrama

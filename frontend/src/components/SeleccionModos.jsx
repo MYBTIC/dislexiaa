@@ -13,17 +13,17 @@ function SeleccionModos({ alSeleccionarAnagrama, alSeleccionarSilabas, alClickCa
 
     return (
         <div id="selection-screen" className="screen">
-            <button className="home-btn top-left game-card-btn" onClick={alClickCasa} title="Ir al inicio">
+            <button className="home-btn top-left game-card-btn" onClick={alClickCasa} title="Ir al inicio" aria-label="Ir al inicio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
             </button>
 
-            <button className="regresar-btn top-left_2 game-card-btn" onClick={alClickRegresar} title="Regresar">
+            <button className="regresar-btn top-left_2 game-card-btn" onClick={alClickRegresar} title="Regresar" aria-label="Regresar a la pantalla anterior">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="m12 19-7-7 7-7"/>
                     <path d="M19 12H5"/>
                 </svg>
@@ -56,9 +56,9 @@ function SeleccionModos({ alSeleccionarAnagrama, alSeleccionarSilabas, alClickCa
                         role="button"
                         aria-label="Jugar Sílabas correctas"
                     >
-                        <div className="game-icon">📝</div>
-                        <h2 className="game-title">Sílabas correctas</h2>
-                        <p className="game-description">Encuentra la sílaba que falta en cada palabra</p>
+                        <div className="game-icon" tabIndex="0">📝</div>
+                        <h2 className="game-title" tabIndex="0">Sílabas correctas</h2>
+                        <p className="game-description" tabIndex="0">Encuentra la sílaba que falta en cada palabra</p>
                     </div>
 
                 </div>

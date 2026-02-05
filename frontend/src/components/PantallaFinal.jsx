@@ -33,13 +33,13 @@ export default function PantallaFinal({ alClickCasa, totalPalabras }) {
                     </svg>
                 </div>
 
-                <h1 className="titulo-resultado titulo-final">Felicidades!</h1>
-                <p className="mensaje-resultado">Has completado todas las palabras</p>
+                <h1 className="titulo-resultado titulo-final" tabIndex="0">Felicidades!</h1>
+                <p className="mensaje-resultado" tabIndex="0">Has completado todas las palabras</p>
 
                 <div className="estadisticas-final">
                     <div className="stat-item">
-                        <span className="stat-numero">{totalPalabras}</span>
-                        <span className="stat-label">Palabras completadas</span>
+                        <span className="stat-numero" tabIndex="0">{totalPalabras}</span>
+                        <span className="stat-label" tabIndex="0">Palabras completadas</span>
                     </div>
                 </div>
 
@@ -49,8 +49,8 @@ export default function PantallaFinal({ alClickCasa, totalPalabras }) {
                     <span className="estrella estrella-grande">*</span>
                 </div>
 
-                <button className="btn-resultado btn-volver-inicio" onClick={alClickCasa}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <button className="btn-resultado btn-volver-inicio" onClick={alClickCasa} aria-label="Volver al inicio">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                         <polyline points="9 22 9 12 15 12 15 22"/>
                     </svg>
