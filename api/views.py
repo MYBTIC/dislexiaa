@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from google import genai
-from google.genai import types
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.conf import settings
@@ -12,6 +10,15 @@ import requests
 from io import BytesIO
 from PIL import Image
 import base64
+
+# Importar Google Generative AI de forma segura
+try:
+    import google.generativeai as genai
+    GENAI_AVAILABLE = True
+except ImportError:
+    genai = None  # Definir como None si no está disponible
+    GENAI_AVAILABLE = False
+    print("⚠️ Google Generative AI no disponible. Usando datos de respaldo.")
 
 # ========== PALABRAS GARANTIZADAS (SIN VALIDACIÓN IA) ==========
 # Estas 10 palabras tienen imágenes verificadas manualmente y NO requieren validación con IA
@@ -61,10 +68,17 @@ PALABRAS_GARANTIZADAS = {
 # Configurar Gemini
 def get_gemini_client():
     """Obtiene el cliente de Gemini configurado"""
+    if not GENAI_AVAILABLE:
+        return None
+
     api_key = getattr(settings, 'GEMINI_API_KEY', None)
     if api_key and api_key.strip():
-        client = genai.Client(api_key=api_key)
-        return client
+        try:
+            genai.configure(api_key=api_key)
+            return genai  # Retorna el módulo configurado
+        except Exception as e:
+            print(f"⚠️ Error configurando Gemini: {e}")
+            return None
     return None
 
 def validar_imagen_con_palabra(client, imagen_url, palabra):
